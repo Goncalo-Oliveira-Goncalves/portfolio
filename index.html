@@ -785,6 +785,53 @@
     }
     .modal-bg.open .modal { transform: none; }
 
+    /* Inline video / Wistia / stream — fixed width so % / min() inside resolve (not shrink-to-fit tiny) */
+    .modal.modal--video {
+      width: min(960px, 96vw);
+      max-width: min(960px, 96vw);
+      box-sizing: border-box;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-2);
+      transform: translateY(22px) scale(0.93);
+      transition: transform 0.48s cubic-bezier(.16, 1, .3, 1);
+      will-change: transform;
+    }
+    .modal-bg.open .modal.modal--video {
+      transform: translateY(0) scale(1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .modal.modal--video,
+      .modal-bg.open .modal.modal--video {
+        transition: none !important;
+        transform: none !important;
+      }
+      .modal-player-foot {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .modal-wistia-poster,
+      .modal-wistia-frame.is-ready wistia-player,
+      .modal-wistia-frame.is-ready .modal-wistia-el {
+        transition: none !important;
+      }
+    }
+    .modal.modal--video #modalBody {
+      display: block;
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+    }
+    .modal.modal--video #modalBody:has(.modal-video-shell--wistia) {
+      max-height: min(88vh, calc(100dvh - 4rem));
+    }
+    .modal.modal--video .modal-video-shell {
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+    }
+
     .modal-bar {
       display: flex;
       align-items: center;
@@ -820,6 +867,219 @@
 
     .modal-embed { aspect-ratio: 16/9; }
     .modal-embed iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    .modal-video-shell {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      background: #050504;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .modal-video-shell > .modal-ext {
+      background: var(--surface-2);
+    }
+    .modal-video-wrap {
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+      background: #050504;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-height: min(78vh, calc(100dvh - 9.5rem));
+      padding: clamp(0.65rem, 2.4vmin, 1.05rem) 0;
+      box-sizing: border-box;
+    }
+    .modal--video .modal-video-wrap {
+      max-height: min(82vh, calc(100dvh - 10.5rem));
+    }
+    .modal--video .modal-video-wrap.modal-wistia-wrap {
+      max-height: none;
+      height: 100%;
+    }
+    .modal-video-wrap--16x9 {
+      aspect-ratio: 16/9;
+      width: 100%;
+      max-height: min(78vh, calc(100dvh - 9.5rem));
+    }
+    .modal-video-wrap--16x9 > iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    .modal-video-wrap--9x16 {
+      width: min(100%, calc((min(78vh, calc(100dvh - 9.5rem))) * 9 / 16));
+      aspect-ratio: 9/16;
+      max-height: min(78vh, calc(100dvh - 9.5rem));
+    }
+    .modal-video {
+      width: 100%;
+      height: 100%;
+      max-height: inherit;
+      object-fit: contain;
+      display: block;
+      background: #000;
+    }
+    .modal-hls-fallback {
+      padding: .75rem 1.25rem;
+      font-size: .82rem;
+      color: var(--cream-55);
+      text-align: center;
+    }
+    .modal-video-foot {
+      padding: 1rem 1.25rem 1.35rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: .65rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .modal-video-shell--wistia {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      /* Definite block height so % / max-height:100% on the player stack resolve */
+      height: min(70vh, calc(100dvh - 12rem));
+      min-height: 180px;
+      max-height: min(74vh, calc(100dvh - 10rem));
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .modal-wistia-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      flex: 1 1 auto;
+      /* Inset from the black shell = padding above & below the “card” */
+      padding: clamp(0.85rem, 2.6vmin, 1.3rem) clamp(0.65rem, 1.6vw, 0.9rem);
+      box-sizing: border-box;
+    }
+    .modal-wistia-casing {
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #030303;
+      box-shadow: inset 0 0 0 1px rgba(237, 232, 220, 0.1);
+    }
+    /* Strut in flow fixes 0×0 when poster/player are abspos (classic aspect-ratio box). */
+    .modal-wistia-frame {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      background: #000;
+      overflow: hidden;
+      align-self: center;
+    }
+    .modal-wistia-frame--9x16::before {
+      content: "";
+      display: block;
+      width: 100%;
+      padding-bottom: 177.77777777777777%;
+    }
+    .modal-wistia-frame--16x9::before {
+      content: "";
+      display: block;
+      width: 100%;
+      padding-bottom: 56.25%;
+    }
+    .modal-wistia-frame .modal-wistia-poster,
+    .modal-wistia-frame wistia-player,
+    .modal-wistia-frame .modal-wistia-el {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .modal-wistia-frame .modal-wistia-poster {
+      object-fit: cover;
+      z-index: 1;
+      transition: opacity 0.45s ease;
+      pointer-events: none;
+    }
+    .modal-wistia-frame.is-ready .modal-wistia-poster {
+      opacity: 0;
+    }
+    .modal-wistia-frame wistia-player,
+    .modal-wistia-frame .modal-wistia-el {
+      z-index: 2;
+    }
+
+    .modal.modal--player .modal-bar {
+      display: none;
+    }
+    .modal-player-foot {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: .35rem;
+      padding: 1rem 1.1rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface-2);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease 0.1s, transform 0.42s cubic-bezier(.16, 1, .3, 1) 0.1s;
+    }
+    .modal-bg.open .modal--video .modal-player-foot:not([hidden]) {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .modal-player-foot[hidden] {
+      display: none !important;
+    }
+    .modal-btn-close-foot {
+      font-family: var(--ff-mono);
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: .7rem 1rem;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #1877f2;
+      color: #fff;
+      transition: filter .15s, transform .1s;
+    }
+    .modal-btn-close-foot:hover {
+      filter: brightness(1.06);
+    }
+    .modal-btn-close-foot:active {
+      transform: scale(0.99);
+    }
+    .modal-foot-ig {
+      font-family: var(--ff-mono);
+      font-size: .62rem;
+      color: var(--cream-55);
+      text-align: center;
+      text-decoration: none;
+      text-transform: lowercase;
+      line-height: 1.35;
+    }
+    .modal-foot-ig:hover {
+      color: var(--gold);
+    }
+    .modal-foot-ig[hidden] {
+      display: none !important;
+    }
 
     .modal-ext {
       display: flex;
@@ -2733,7 +2993,7 @@
 
 <!-- ── VIDEO MODAL ───────────────────────────────────── -->
 <div class="modal-bg" id="modalBg">
-  <div class="modal">
+  <div class="modal" id="modalPanel">
     <div class="modal-bar">
       <div style="display:flex;align-items:center;gap:.5rem">
         <span class="modal-bar-title" id="modalTitle"></span>
@@ -2747,6 +3007,10 @@
       </button>
     </div>
     <div id="modalBody"></div>
+    <div class="modal-player-foot" id="modalPlayerFoot" hidden>
+      <button type="button" class="modal-btn-close-foot" id="modalCloseFoot">Close</button>
+      <a class="modal-foot-ig" id="modalFootIg" href="#" target="_blank" rel="noopener noreferrer" hidden>open in instagram</a>
+    </div>
   </div>
 </div>
 
@@ -2834,6 +3098,199 @@ function vimeoEmbed(url) {
   const id = vimeoId(url);
   return id ? `https://player.vimeo.com/video/${id}?autoplay=1` : null;
 }
+
+function wistiaMediaId(v) {
+  if (!v) return null;
+  if (v.wistiaId != null && String(v.wistiaId).trim()) return String(v.wistiaId).trim();
+  var url = v.url;
+  if (!url || typeof url !== 'string') return null;
+  var m = url.match(/wistia\.com\/(?:embed\/iframe\/)?medias\/([a-z0-9]+)/i);
+  return m ? m[1] : null;
+}
+function wistiaSwatchUrl(mediaId) {
+  return 'https://fast.wistia.com/embed/medias/' + encodeURIComponent(mediaId) + '/swatch';
+}
+
+var _wistiaOembedCache = window._wistiaOembedCache || (window._wistiaOembedCache = {});
+
+function wistiaOembedFetch(mediaId) {
+  if (_wistiaOembedCache[mediaId]) return Promise.resolve(_wistiaOembedCache[mediaId]);
+  return fetch('https://fast.wistia.com/oembed?url=' + encodeURIComponent('https://wistia.com/medias/' + mediaId))
+    .then(function(r) {
+      if (!r.ok) throw new Error('oembed');
+      return r.json();
+    })
+    .then(function(d) {
+      _wistiaOembedCache[mediaId] = d;
+      return d;
+    });
+}
+
+function wistiaPosterUrlAsync(mediaId, cb) {
+  wistiaOembedFetch(mediaId)
+    .then(function(d) {
+      cb(d && d.thumbnail_url ? d.thumbnail_url : wistiaSwatchUrl(mediaId));
+    })
+    .catch(function() {
+      cb(wistiaSwatchUrl(mediaId));
+    });
+}
+function ensureWistiaStyleForMedia(mediaId) {
+  var id = 'wistia-style-' + mediaId;
+  if (document.getElementById(id)) return;
+  var l = document.createElement('link');
+  l.id = id;
+  l.rel = 'stylesheet';
+  l.href = 'https://fast.wistia.com/embed/medias/' + encodeURIComponent(mediaId) + '/style.css';
+  document.head.appendChild(l);
+}
+function ensureWistiaPlayerJs(cb) {
+  var el = document.getElementById('wistia-player-js');
+  function done() {
+    var s = document.getElementById('wistia-player-js');
+    if (s) s.dataset.loaded = '1';
+    cb();
+  }
+  if (!el) {
+    el = document.createElement('script');
+    el.id = 'wistia-player-js';
+    el.src = 'https://fast.wistia.com/player.js';
+    el.async = true;
+    el.onload = done;
+    document.head.appendChild(el);
+    return;
+  }
+  if (el.dataset.loaded === '1') return done();
+  el.addEventListener('load', function() {
+    el.dataset.loaded = '1';
+    done();
+  });
+}
+function ensureWistiaEmbedScript(mediaId) {
+  var eid = 'wistia-embed-' + mediaId;
+  if (document.getElementById(eid)) return;
+  var s = document.createElement('script');
+  s.id = eid;
+  s.src = 'https://fast.wistia.com/embed/' + encodeURIComponent(mediaId) + '.js';
+  s.async = true;
+  s.type = 'module';
+  document.head.appendChild(s);
+}
+function openWistiaModal(v, mediaId) {
+  var body = document.getElementById('modalBody');
+  ensureWistiaStyleForMedia(mediaId);
+  var horizontal = (v.format || 'vertical') === 'horizontal';
+  var aspect = horizontal ? '1.7777777777777777' : '0.5625';
+
+  function mountWithPoster(posterUrl) {
+    var posterTag = posterUrl
+      ? '<img class="modal-wistia-poster" src="' + escapeHTML(posterUrl) + '" alt="" decoding="async" fetchpriority="high">'
+      : '';
+    var frameClass = horizontal ? 'modal-wistia-frame--16x9' : 'modal-wistia-frame--9x16';
+    body.innerHTML =
+      '<div class="modal-video-shell modal-video-shell--wistia">' +
+      '<div class="modal-video-wrap modal-wistia-wrap">' +
+      '<div class="modal-wistia-casing">' +
+      '<div class="modal-wistia-frame ' + frameClass + '">' +
+      posterTag +
+      '<wistia-player class="modal-wistia-el" media-id="' + escapeHTML(mediaId) + '" aspect="' + aspect + '"></wistia-player>' +
+      '</div></div></div></div>';
+    applyPlayerModalChrome(true);
+    setModalFootInstagram(v.url);
+    document.body.style.overflow = 'hidden';
+    queueModalBackdropOpen();
+
+    var frame = body.querySelector('.modal-wistia-frame');
+    function markReady() {
+      if (!frame || frame.classList.contains('is-ready')) return;
+      frame.classList.add('is-ready');
+    }
+
+    ensureWistiaPlayerJs(function() {
+      ensureWistiaEmbedScript(mediaId);
+      if (window._wistiaModalPoll) clearInterval(window._wistiaModalPoll);
+      var minAt = Date.now() + 340;
+      var tries = 0;
+      window._wistiaModalPoll = setInterval(function() {
+        tries++;
+        var wp = body.querySelector('wistia-player');
+        var h = wp ? wp.getBoundingClientRect().height : 0;
+        if (h > 56 || tries > 50) {
+          clearInterval(window._wistiaModalPoll);
+          window._wistiaModalPoll = null;
+          var wait = Math.max(0, minAt - Date.now());
+          setTimeout(function() {
+            requestAnimationFrame(function() { requestAnimationFrame(markReady); });
+          }, wait);
+        }
+      }, 40);
+    });
+  }
+
+  wistiaPosterUrlAsync(mediaId, mountWithPoster);
+}
+
+function streamUrl(v) {
+  if (!v) return null;
+  var s = v.stream != null ? v.stream : v.src;
+  if (s == null || typeof s !== 'string') return null;
+  s = s.trim();
+  return s.length ? s : null;
+}
+function ensureHlsLoaded(cb) {
+  if (window.Hls) return cb();
+  var existing = document.getElementById('hlsjsScript');
+  if (existing) {
+    existing.addEventListener('load', function() { cb(); });
+    return;
+  }
+  var s = document.createElement('script');
+  s.id = 'hlsjsScript';
+  s.src = 'https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js';
+  s.async = true;
+  s.onload = function() { cb(); };
+  document.head.appendChild(s);
+}
+function destroyModalHls() {
+  if (window._modalHls) {
+    try { window._modalHls.destroy(); } catch (e) {}
+    window._modalHls = null;
+  }
+}
+function attachStreamToVideo(video, stream) {
+  if (!video || !stream) return;
+  var isHls = /\.m3u8(\?|$)/i.test(stream);
+  if (!isHls) {
+    video.src = stream;
+    return;
+  }
+  if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = stream;
+    return;
+  }
+  if (window.Hls && window.Hls.isSupported()) {
+    destroyModalHls();
+    var hls = new window.Hls({ capLevelToPlayerSize: true, maxBufferLength: 30 });
+    window._modalHls = hls;
+    hls.loadSource(stream);
+    hls.attachMedia(video);
+    return;
+  }
+  ensureHlsLoaded(function() {
+    var el = document.getElementById('modalVideoPlayer');
+    if (!el || el !== video) return;
+    if (!window.Hls || !window.Hls.isSupported()) {
+      el.insertAdjacentHTML('afterend', '<p class="modal-hls-fallback">This browser cannot play HLS. Use an MP4 link or try Safari.</p>');
+      return;
+    }
+    destroyModalHls();
+    var hls2 = new window.Hls({ capLevelToPlayerSize: true, maxBufferLength: 30 });
+    window._modalHls = hls2;
+    hls2.loadSource(stream);
+    hls2.attachMedia(el);
+  });
+}
+
 /* Build Instagram preview URL from a reel/post link.
    Instagram exposes a public image via `/media/?size=X`:
      size=t → thumbnail   size=m → medium   size=l → large (≈1080 wide)
@@ -2850,7 +3307,7 @@ function catLabel(c) {
   return { commercial:'Commercial', music:'Music Video', film:'Short Film', social:'Social Media' }[c] || c;
 }
 function platformLabel(t) {
-  return { youtube:'YouTube', instagram:'Instagram', drive:'Google Drive', vimeo:'Vimeo', external:'External' }[t] || t;
+  return { youtube:'YouTube', instagram:'Instagram', drive:'Google Drive', vimeo:'Vimeo', wistia:'Wistia', external:'External' }[t] || t;
 }
 function escapeHTML(s) {
   return String(s == null ? '' : s)
@@ -2919,6 +3376,11 @@ function videoMedia(v, i) {
     if (yt) return '<img class="v-thumb" src="' + yt + '" alt="' + title + '" loading="lazy">';
   }
 
+  var wistiaId = wistiaMediaId(v);
+  if (wistiaId) {
+    return '<img class="v-thumb" data-wistia-id="' + escapeHTML(wistiaId) + '" src="' + escapeHTML(wistiaSwatchUrl(wistiaId)) + '" alt="' + title + '" loading="lazy" decoding="async">';
+  }
+
   if (v.type === 'instagram') {
     /* Auto-derive thumbnail from the IG URL; degrades l → m → t → fallback */
     var ig = igThumb(v.url, 'l');
@@ -2940,7 +3402,7 @@ function renderGrid() {
 
   var content = document.getElementById('workContent');
   content.innerHTML = '<div class="video-grid" id="videoGrid">' + videos.map(function(v, i) {
-    var isExt  = v.type !== 'youtube' && v.type !== 'vimeo';
+    var isExt  = v.type !== 'youtube' && v.type !== 'vimeo' && v.type !== 'wistia' && !wistiaMediaId(v);
     var format = v.format || (v.type === 'instagram' ? 'vertical' : 'horizontal');
     var delay  = Math.min(i, 12) * 55; /* cap so late cards don't lag too long */
     return '<div class="v-card v-enter" data-cat="' + v.category + '" data-format="' + format + '" ' +
@@ -2954,6 +3416,29 @@ function renderGrid() {
 
   updateCount();
   setTimeout(function() { applyCardTilt('.v-card'); }, 60);
+  setTimeout(upgradeWistiaGridThumbs, 0);
+  if (CURRENT_PROJECT && CURRENT_PROJECT.videos) {
+    CURRENT_PROJECT.videos.forEach(function(v) {
+      var wid = wistiaMediaId(v);
+      if (wid) wistiaOembedFetch(wid).catch(function() {});
+    });
+  }
+}
+
+function upgradeWistiaGridThumbs() {
+  document.querySelectorAll('img.v-thumb[data-wistia-id]').forEach(function(img) {
+    var id = img.getAttribute('data-wistia-id');
+    if (!id) return;
+    if (_wistiaOembedCache[id] && _wistiaOembedCache[id].thumbnail_url) {
+      img.src = _wistiaOembedCache[id].thumbnail_url;
+      return;
+    }
+    wistiaOembedFetch(id)
+      .then(function(d) {
+        if (d && d.thumbnail_url && img.getAttribute('data-wistia-id') === id) img.src = d.thumbnail_url;
+      })
+      .catch(function() {});
+  });
 }
 
 /* ================================================================
@@ -3220,40 +3705,156 @@ function updateCount() {
 /* ================================================================
    MODAL
    ================================================================ */
+function setModalFootInstagram(url) {
+  var a = document.getElementById('modalFootIg');
+  if (!a) return;
+  var u = url != null ? String(url).trim() : '';
+  if (u && /instagram\.com/i.test(u)) {
+    a.href = u;
+    a.removeAttribute('hidden');
+  } else {
+    a.removeAttribute('href');
+    a.setAttribute('hidden', '');
+  }
+}
+
+function applyPlayerModalChrome(on) {
+  var panel = document.getElementById('modalPanel');
+  var foot = document.getElementById('modalPlayerFoot');
+  if (panel) {
+    panel.classList.toggle('modal--player', on);
+    panel.classList.toggle('modal--video', on);
+  }
+  if (foot) foot.hidden = !on;
+}
+
+/* Defer .open on the backdrop by two frames + reflow so transform transitions actually run. */
+function queueModalBackdropOpen() {
+  var bg = document.getElementById('modalBg');
+  var panel = document.getElementById('modalPanel');
+  if (!bg) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    bg.classList.add('open');
+    return;
+  }
+  if (panel) void panel.offsetWidth;
+  else void bg.offsetWidth;
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      bg.classList.add('open');
+    });
+  });
+}
+
 function openModal(i) {
   const v = CURRENT_PROJECT.videos[i];
   document.getElementById('modalTitle').textContent = v.title;
   document.getElementById('modalMeta').textContent = catLabel(v.category);
   const body = document.getElementById('modalBody');
 
-  if (v.type === 'youtube') {
-    body.innerHTML = `<div class="modal-embed"><iframe src="${ytEmbed(v.url)}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe></div>`;
-  } else if (v.type === 'vimeo') {
-    body.innerHTML = `<div class="modal-embed"><iframe src="${vimeoEmbed(v.url)}" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
-  } else {
-    body.innerHTML = `
-      <div class="modal-ext">
-        <div class="modal-ext-icon">
-          <svg width="44" height="44" fill="none" viewBox="0 0 24 24">
-            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <p>This video is hosted on <strong>${platformLabel(v.type)}</strong></p>
-        <a href="${v.url}" target="_blank" rel="noopener noreferrer" class="btn btn-solid">Watch on ${platformLabel(v.type)} ↗</a>
-      </div>`;
+  const wistiaIdResolved = wistiaMediaId(v);
+  if (wistiaIdResolved) {
+    openWistiaModal(v, wistiaIdResolved);
+    return;
   }
 
-  document.getElementById('modalBg').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  const stream = streamUrl(v);
+  if (stream) {
+    const poster = v.thumb || (v.type === 'instagram' && v.url ? igThumb(v.url, 'l') : '');
+    const format = v.format || (v.type === 'instagram' ? 'vertical' : 'horizontal');
+    const fmtClass = format === 'vertical' ? 'modal-video-wrap--9x16' : 'modal-video-wrap--16x9';
+    var footOther = '';
+    if (v.url && v.type !== 'instagram' && v.type !== 'hosted' && v.type !== 'youtube' && v.type !== 'vimeo' && v.type !== 'wistia') {
+      footOther = '<div class="modal-video-foot"><a href="' + escapeHTML(v.url) + '" target="_blank" rel="noopener noreferrer" class="btn btn-solid">Open link</a></div>';
+    }
+    body.innerHTML =
+      '<div class="modal-video-shell">' +
+      '<div class="modal-video-wrap ' + fmtClass + '">' +
+      '<video id="modalVideoPlayer" class="modal-video" playsinline webkit-playsinline controls ' +
+      'aria-label="' + escapeHTML(v.title) + '" ' +
+      (poster ? 'poster="' + escapeHTML(poster) + '" ' : '') +
+      'preload="metadata"></video>' +
+      '</div>' + footOther + '</div>';
+    applyPlayerModalChrome(true);
+    setModalFootInstagram(v.url);
+    document.body.style.overflow = 'hidden';
+    queueModalBackdropOpen();
+    setTimeout(function() {
+      var el = document.getElementById('modalVideoPlayer');
+      if (el) attachStreamToVideo(el, stream);
+    }, 0);
+    return;
+  }
+
+  if (v.type === 'youtube') {
+    var ytSrc = ytEmbed(v.url);
+    body.innerHTML =
+      '<div class="modal-video-shell">' +
+      '<div class="modal-video-wrap modal-video-wrap--16x9">' +
+      (ytSrc
+        ? '<iframe src="' + escapeHTML(ytSrc) + '" allow="autoplay; encrypted-media; fullscreen" allowfullscreen title="' + escapeHTML(v.title) + '"></iframe>'
+        : '<p class="modal-hls-fallback">Invalid YouTube URL</p>') +
+      '</div></div>';
+    applyPlayerModalChrome(true);
+    setModalFootInstagram(v.url);
+    document.body.style.overflow = 'hidden';
+    queueModalBackdropOpen();
+  } else if (v.type === 'vimeo') {
+    var vmSrc = vimeoEmbed(v.url);
+    body.innerHTML =
+      '<div class="modal-video-shell">' +
+      '<div class="modal-video-wrap modal-video-wrap--16x9">' +
+      (vmSrc
+        ? '<iframe src="' + escapeHTML(vmSrc) + '" allow="autoplay; fullscreen" allowfullscreen title="' + escapeHTML(v.title) + '"></iframe>'
+        : '<p class="modal-hls-fallback">Invalid Vimeo URL</p>') +
+      '</div></div>';
+    applyPlayerModalChrome(true);
+    setModalFootInstagram(v.url);
+    document.body.style.overflow = 'hidden';
+    queueModalBackdropOpen();
+  } else {
+    body.innerHTML =
+      '<div class="modal-video-shell">' +
+      '<div class="modal-ext">' +
+      '<div class="modal-ext-icon">' +
+      '<svg width="44" height="44" fill="none" viewBox="0 0 24 24">' +
+      '<path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg></div>' +
+      '<p>This video is hosted on <strong>' + escapeHTML(platformLabel(v.type)) + '</strong></p>' +
+      '<a href="' + escapeHTML(v.url) + '" target="_blank" rel="noopener noreferrer" class="btn btn-solid">Watch on ' + escapeHTML(platformLabel(v.type)) + ' ↗</a>' +
+      '</div></div>';
+    applyPlayerModalChrome(true);
+    setModalFootInstagram(v.url);
+    document.body.style.overflow = 'hidden';
+    queueModalBackdropOpen();
+  }
 }
 
 function closeModal() {
+  if (window._wistiaModalPoll) {
+    clearInterval(window._wistiaModalPoll);
+    window._wistiaModalPoll = null;
+  }
+  setModalFootInstagram(null);
+  destroyModalHls();
+  var vid = document.getElementById('modalVideoPlayer');
+  if (vid) {
+    try {
+      vid.pause();
+      vid.removeAttribute('src');
+      vid.load();
+    } catch (e) {}
+  }
   document.getElementById('modalBg').classList.remove('open');
   document.body.style.overflow = '';
-  setTimeout(() => { document.getElementById('modalBody').innerHTML = ''; }, 320);
+  setTimeout(function() {
+    applyPlayerModalChrome(false);
+    document.getElementById('modalBody').innerHTML = '';
+  }, 320);
 }
 
 document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalCloseFoot').addEventListener('click', closeModal);
 document.getElementById('modalBg').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 

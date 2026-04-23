@@ -20,8 +20,13 @@
 //   client   — client name or "Personal Work"
 //   category — "social" | "commercial" | "music" | "film"
 //   year     — "2025"
-//   type     — "instagram" | "youtube" | "vimeo" | "drive" | "external"
-//   url      — full link to the video
+//   type     — "instagram" | "youtube" | "vimeo" | "drive" | "external" | "hosted" | "wistia"
+//   url      — full link to the video (or Instagram post when you also stream / Wistia + IG)
+//   wistiaId — Wistia media id (e.g. from embed URL). Opens inline player in modal; card uses Wistia swatch.
+//   stream   — (OPTIONAL) direct URL to an MP4 or HLS (.m3u8) — plays in-site in the modal.
+//              `src` is accepted as an alias. Works with Cloudflare Stream, Bunny, Mux, S3+CDN, etc.
+//              When set alongside type "instagram", the grid still uses IG thumbnails; the modal
+//              streams your file and can show "View on Instagram" from `url`.
 //   thumb    — (OPTIONAL) preview image URL. You usually DON'T need this:
 //                • YouTube → thumbnail is auto-fetched from the video ID.
 //                • Instagram → thumbnail is auto-fetched via the IG URL
@@ -29,6 +34,10 @@
 //                  paste the reel/post URL and it works).
 //              Only set `thumb` to override the auto preview with your own image.
 //   format   — (optional) "vertical" | "horizontal" (Instagram defaults to vertical)
+//
+// IN-SITE VIDEO: add `stream: "https://…/file.mp4"` (or .m3u8) on each clip you want to play
+// in the modal. Without `stream`, Instagram/Drive entries only show an external link.
+// The file must be a direct URL (HTTPS), publicly readable, with CORS if you use HLS in Chrome.
 //
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -43,8 +52,10 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
-        type: "instagram",
-        url: "https://www.instagram.com/p/DWuGvJ0gttC/"
+        type: "wistia",
+        wistiaId: "zzr48cyoil",
+        url: "https://www.instagram.com/p/DWuGvJ0gttC/",
+        format: "vertical"
       },
       {
         title: "TOFU, MOFU or TOFU?",
@@ -86,6 +97,17 @@ var PROJECTS = [
       //   year: "2025",
       //   type: "instagram",
       //   url: "https://www.instagram.com/reel/XXXXX/"
+      // },
+      // Stream on-site (MP4 or HLS) and keep the Instagram link for attribution:
+      // {
+      //   title: "My reel",
+      //   client: "Personal Work",
+      //   category: "social",
+      //   year: "2026",
+      //   type: "instagram",
+      //   url: "https://www.instagram.com/p/XXXX/",
+      //   stream: "https://YOUR_CDN/exports/reel.mp4",
+      //   format: "vertical",
       // },
     ]
   },
@@ -171,7 +193,7 @@ var PROJECTS = [
         year: "2026",
         type: "drive",
         url: "https://drive.google.com/file/d/1ai8jHSZm6kphlZSoxJye6IadCaBk0lz1/view?usp=sharing",
-        format: "horziontal"
+        format: "horizontal"
       },
     ]
   },
