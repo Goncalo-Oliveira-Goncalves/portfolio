@@ -61,6 +61,7 @@ var PROJECTS = [
         title: "TOFU, MOFU or TOFU?",
         client: "Personal Work",
         category: "social",
+        wistiaId: "qcchuj6bgt",
         year: "2026",
         type: "instagram",
         url: "https://www.instagram.com/p/DWzNIy8Aj6Y/"
@@ -69,6 +70,7 @@ var PROJECTS = [
         title: "100 vs 100K vs 1M",
         client: "Personal Work",
         category: "social",
+        wistiaId: "js41ps6k3b",
         year: "2026",
         type: "instagram",
         url: "https://www.instagram.com/p/DWv5R2UAjyO/"
@@ -77,6 +79,7 @@ var PROJECTS = [
         title: "Conversion vs Views",
         client: "Personal Work",
         category: "social",
+        wistiaId: "6pcc5pcj3g",
         year: "2026",
         type: "instagram",
         url: "https://www.instagram.com/p/DWnlb53gluq/"
@@ -86,6 +89,7 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "imvtixk89p",
         type: "instagram",
         url: "https://www.instagram.com/p/DWmRC_iAqP6/"
       },
@@ -121,6 +125,7 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "cm153psvu1",
         type: "instagram",
         url: "https://www.instagram.com/p/DW9W1VRgpFu/"
       },
@@ -129,6 +134,7 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "jmuu2ix2d3",
         type: "instagram",
         url: "https://www.instagram.com/p/DW8iYinjGI1/"
       },
@@ -137,6 +143,7 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "94kugv06ac",
         type: "instagram",
         url: "https://www.instagram.com/p/DW7MwylgpNa/"
       },
@@ -152,6 +159,7 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "4m4t56gwf8",
         type: "instagram",
         url: "https://www.instagram.com/p/DVmFF5lgkN6/"
       },
@@ -160,6 +168,7 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "04p23twucy",
         type: "instagram",
         url: "https://www.instagram.com/p/DWB7OWLiXVg/"
       },
@@ -168,6 +177,7 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "qitqasdvig",
         type: "instagram",
         url: "https://www.instagram.com/p/DV_WW3JiIRB/"
       },
@@ -176,6 +186,7 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "hxaurc5tgg",
         type: "instagram",
         url: "https://www.instagram.com/p/DV6Mx_xDCMw/"
       },
@@ -191,10 +202,21 @@ var PROJECTS = [
         client: "Personal Work",
         category: "social",
         year: "2026",
+        wistiaId: "b9067w6dkg",
         type: "drive",
         url: "https://drive.google.com/file/d/1ai8jHSZm6kphlZSoxJye6IadCaBk0lz1/view?usp=sharing",
         format: "horizontal"
       },
+      {
+        title: "Infi's Diary",
+        client: "Practice",
+        category: "social",
+        year: "2026",
+        wistiaId: "",
+        type: "drive",
+        url: "https://drive.google.com/file/d/1HhKnsS2ialhGMGz4QIOR3BCUPdYrGvXN/view?usp=sharing",
+        format: "horizontal"
+      }
     ]
   },
 ];

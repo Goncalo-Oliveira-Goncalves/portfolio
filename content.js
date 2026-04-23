@@ -88,6 +88,13 @@ flowchart LR
 //
 var RECENT_COURSES = [
   {
+    title: "Introduction to Color",
+    provider: "Blackmagic Design",
+    link: "https://www.blackmagicdesign.com/products/davinciresolve/training",
+    date: "2025",
+    tag: "Color Grading"
+  },
+  {
     title: "Color 101",
     provider: "GroundControl",
     link: "https://www.groundcontrol.film/offers/LygZ4PFT/checkout",
