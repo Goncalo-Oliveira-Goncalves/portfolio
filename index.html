@@ -37,7 +37,12 @@
       --ff-mono:    'DM Mono', monospace;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      max-width: 100%;
+      overflow-x: hidden;
+      overflow-x: clip;
+    }
 
     body {
       background: var(--ink);
@@ -46,7 +51,9 @@
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      max-width: 100%;
       overflow-x: hidden;
+      overflow-x: clip;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -310,7 +317,7 @@
         left: 0;
         right: 0;
         transform: none;
-        width: max-content;
+        width: auto;
         margin-inline: auto;
       }
     }
@@ -1626,7 +1633,7 @@
     }
     .testi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
@@ -1656,6 +1663,7 @@
       color: var(--cream);
       font-weight: 400;
       flex: 1;
+      overflow-wrap: anywhere;
     }
     .testi-quote strong { color: var(--gold); font-weight: 600; }
     .testi-quote em { color: var(--cream); font-style: italic; }
@@ -1687,6 +1695,7 @@
       font-weight: 600;
       color: var(--cream);
       line-height: 1.2;
+      overflow-wrap: anywhere;
     }
     .testi-role {
       font-family: var(--ff-mono);
@@ -1694,6 +1703,7 @@
       letter-spacing: .1em;
       color: var(--cream-55);
       margin-top: .15rem;
+      overflow-wrap: anywhere;
     }
     .testi-empty {
       padding: 2rem;
@@ -2911,7 +2921,7 @@
   <div class="section">
     <div class="r" style="margin-bottom:1rem">
       <span class="s-label">People Who Say I Am Awesome</span>
-      <h2 class="s-title">"He's Awesome"<em>Reviews</em></h2>
+      <h2 class="s-title">"He's Awesome" <em>Reviews</em></h2>
     </div>
     <div class="testi-grid r d1" id="testiGrid"></div>
   </div>
