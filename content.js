@@ -130,4 +130,9 @@ var TESTIMONIALS = [
     name: "Joe Rebea",
     role: "Creator",
   },
+  {
+    quote: "Incrediable editing and can make the best shorts ever and its have subtitle 10/10 recommend him to anyone.",
+    name: "Ocean",
+    role: "Creator",
+  },
 ];
